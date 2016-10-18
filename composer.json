@@ -1,5 +1,5 @@
 {
-  "name": "WebComposer/SynchronizationBundle",
+  "name": "web-composer/synchronization-bundle",
   "description": "read a php composer project and save informations in an database",
   "keywords": [
     "package synchronizer"
