@@ -20,7 +20,7 @@ Add this repository to your composer.json as below:
     ...
     "require-dev": {
         ...
-        "WebComposer/SynchronizationBundle": "0.1.*"
+        "web-composer/synchronization-bundle": "0.1.*"
     }
 }
 ```
