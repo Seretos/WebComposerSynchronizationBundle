@@ -1,0 +1,16 @@
+services:
+#    web_composer_synchronization.example:
+#        class: WebComposer\SynchronizationBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]
+     composer_dependency_analyzer:
+         class: JMS\Composer\DependencyAnalyzer
+         public: false
+     web_composer.entity_factory:
+         class: WebComposer\SynchronizationBundle\Service\ServiceEntityFactory
+         public: false
+     web_composer.save_service:
+         class: WebComposer\SynchronizationBundle\Service\SaveService
+         arguments: ["@web_composer.entity_factory","@doctrine.orm.entity_manager"]
+     web_composer.synchronizer:
+         class: WebComposer\SynchronizationBundle\Service\SynchronizationService
+         arguments: ["@composer_dependency_analyzer","@doctrine.orm.entity_manager","@web_composer.save_service","@web_composer.entity_factory"]

@@ -1,0 +1,11 @@
+<phpunit>
+    <php>
+        <ini name="error_reporting" value="-1" />
+        <server name="KERNEL_DIR" value="app/" />
+    </php>
+    <testsuites>
+        <testsuite name="WebComposerSynchronizationBundle integration tests">
+            <file>Tests/SynchronizeControllerIntegrationTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>

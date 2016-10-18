@@ -1,0 +1,30 @@
+<phpunit>
+    <php>
+        <ini name="error_reporting" value="-1" />
+        <server name="KERNEL_DIR" value="app/" />
+    </php>
+    <logging>
+        <log type="coverage-text" target="coverage.txt" showUncoveredFiles="false"/>
+    </logging>
+    <testsuites>
+        <testsuite name="WebComposerSynchronizationBundle unit tests">
+            <directory>Tests/Service/</directory>
+            <directory>Tests/DataFixtures/ORM/</directory>
+            <directory>Tests/Repository/</directory>
+            <directory>Tests/Controller/</directory>
+            <directory>Tests/Command/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>*</directory>
+            <exclude>
+                <directory>Tests</directory>
+                <directory>DependencyInjection</directory>
+                <directory>Entity</directory>
+                <file>*Bundle.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
