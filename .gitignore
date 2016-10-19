@@ -1,0 +1,4 @@
+coverage.txt
+phpunit.xml
+integration.xml
+composer.phar
