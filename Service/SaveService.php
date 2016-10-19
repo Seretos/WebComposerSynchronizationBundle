@@ -19,15 +19,17 @@ class SaveService
 {
     private $factory;
     private $manager;
+
     public function __construct(ServiceEntityFactory $factory, EntityManager $manager)
     {
         $this->factory = $factory;
         $this->manager = $manager;
     }
 
-    public function buildProject($name, $directory){
+    public function buildProject($name, $directory)
+    {
         $project = $this->manager->getRepository(Project::class)->findOneBy(['name' => $name]);
-        if($project == null){
+        if ($project == null) {
             $project = $this->factory->createProject();
         }
         $project->setName($name);
@@ -39,12 +41,12 @@ class SaveService
         return $project;
     }
 
-    public function buildPackage($name, $version = null, $repository = null){
+    public function buildPackage($name, $repository = null)
+    {
         $package = $this->manager->getRepository(Package::class)->findOneBy(['name' => $name]);
-        if($package == null){
+        if ($package == null) {
             $package = $this->factory->createPackage();
             $package->setName($name);
-            $package->setMaxVersion($version);
             $package->setRepository($repository);
             $this->manager->persist($package);
             $this->manager->flush();
@@ -53,9 +55,10 @@ class SaveService
         return $package;
     }
 
-    public function buildProjectPackage(Project $project, Package $package, $version = null){
-        $projectPackage = $this->manager->getRepository(ProjectPackage::class)->findOneBy(['project' => $project,'package' => $package]);
-        if($projectPackage == null){
+    public function buildProjectPackage(Project $project, Package $package, $version = null)
+    {
+        $projectPackage = $this->manager->getRepository(ProjectPackage::class)->findOneBy(['project' => $project, 'package' => $package]);
+        if ($projectPackage == null) {
             $projectPackage = $this->factory->createProjectPackage();
             $projectPackage->setPackage($package);
             $projectPackage->setProject($project);
@@ -70,9 +73,10 @@ class SaveService
         return $projectPackage;
     }
 
-    public function buildProjectPackageDependency(ProjectPackage $source, ProjectPackage $target, $version = null, $development = false){
+    public function buildProjectPackageDependency(ProjectPackage $source, ProjectPackage $target, $version = null, $development = false)
+    {
         $projectPackageDependency = $this->manager->getRepository(ProjectPackageDependency::class)->findOneBy(['sourceProjectPackage' => $source, 'targetProjectPackage' => $target]);
-        if($projectPackageDependency == null){
+        if ($projectPackageDependency == null) {
             $projectPackageDependency = $this->factory->createProjectPackageDependency();
             $projectPackageDependency->setSourceProjectPackage($source);
             $projectPackageDependency->setTargetProjectPackage($target);

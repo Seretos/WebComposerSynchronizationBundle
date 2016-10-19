@@ -1,5 +1,6 @@
 <?php
 namespace WebComposer\SynchronizationBundle\Entity;
+
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -18,6 +19,11 @@ class ProjectPackage
      * @ORM\Column(type="string", nullable=true)
      */
     private $version;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $maxVersion;
 
     /**
      * @ORM\OneToMany(
@@ -48,6 +54,7 @@ class ProjectPackage
      * @ORM\JoinColumn(name="package_id", referencedColumnName="id", nullable=false)
      */
     private $package;
+
     /**
      * Constructor
      */
@@ -89,6 +96,30 @@ class ProjectPackage
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set maxVersion
+     *
+     * @param string $maxVersion
+     *
+     * @return ProjectPackage
+     */
+    public function setMaxVersion($maxVersion)
+    {
+        $this->maxVersion = $maxVersion;
+
+        return $this;
+    }
+
+    /**
+     * Get maxVersion
+     *
+     * @return string
+     */
+    public function getMaxVersion()
+    {
+        return $this->maxVersion;
     }
 
     /**

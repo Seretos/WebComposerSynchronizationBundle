@@ -24,14 +24,16 @@ class ProjectSynchronizeCommand extends Command implements ContainerAwareInterfa
      */
     private $container;
 
-    protected function configure(){
+    protected function configure()
+    {
         $this->setName('web-composer:synchronize-project')
             ->setDescription('synchronize an project')
             ->setHelp('php bin/console web-composer:synchronize-project projectName')
             ->addArgument('projectName', InputArgument::REQUIRED, 'The name of the project');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output){
+    public function execute(InputInterface $input, OutputInterface $output)
+    {
         $projectName = $input->getArgument('projectName');
 
         /**
@@ -43,23 +45,23 @@ class ProjectSynchronizeCommand extends Command implements ContainerAwareInterfa
         $graph = $synchronizer->analyze($project);
 
         $packages = $synchronizer->synchronizePackages($graph);
-        foreach($packages as $package){
-            $output->writeln('update package '.$package->getName() . ' - '.$package->getMaxVersion());
+        foreach ($packages as $package) {
+            $output->writeln('update package ' . $package->getName());
         }
 
-        $projectPackages = $synchronizer->synchronizeProjectPackages($project,$graph);
-        foreach($projectPackages as $package){
-            $output->writeln('update project package '.$package->getPackage()->getName() . ' - '.$package->getVersion());
+        $projectPackages = $synchronizer->synchronizeProjectPackages($project, $graph);
+        foreach ($projectPackages as $package) {
+            $output->writeln('update project package ' . $package->getPackage()->getName() . ' - ' . $package->getVersion());
         }
 
-        $dependencies = $synchronizer->synchronizeProjectPackageDependencies($project,$graph);
-        foreach($dependencies as $dependency){
-            $output->writeln('update project dependency '.$dependency->getSourceProjectPackage()->getPackage()->getName() . ' - '. $dependency->getTargetProjectPackage()->getPackage()->getName().' - ' .$dependency->getVersion());
+        $dependencies = $synchronizer->synchronizeProjectPackageDependencies($project, $graph);
+        foreach ($dependencies as $dependency) {
+            $output->writeln('update project dependency ' . $dependency->getSourceProjectPackage()->getPackage()->getName() . ' - ' . $dependency->getTargetProjectPackage()->getPackage()->getName() . ' - ' . $dependency->getVersion());
         }
 
         $outdatedPackages = $synchronizer->synchronizePackageVersions($project);
-        foreach ($outdatedPackages as $package){
-            $output->writeln('updated outdated package '.$package->getName());
+        foreach ($outdatedPackages as $package) {
+            $output->writeln('updated outdated package ' . $package->getPackage()->getName() . ' - ' . $package->getMaxVersion());
         }
     }
 

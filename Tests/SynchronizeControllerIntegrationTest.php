@@ -14,17 +14,17 @@ class SynchronizeControllerIntegrationTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/synchronize/webComposer');
-        $projectPath = realpath(__DIR__.'/../../../../');
+        $client->request('GET', '/synchronize/webComposer');
+        $projectPath = realpath(__DIR__ . '/../../../../');
 
         $analyzer = new DependencyAnalyzer();
         $graph = $analyzer->analyze($projectPath);
 
-        foreach($graph->getPackages() as $package){
-            $this->assertContains('package: '.$package->getName().' - '/*.$package->getVersion()*/,$client->getResponse()->getContent());
-            $this->assertContains('projectPackage: '.$package->getName().' - '.$package->getVersion(),$client->getResponse()->getContent());
-            foreach($package->getOutEdges() as $edge){
-                $this->assertContains('dependency: '.$edge->getSourcePackage()->getName().' - '.$edge->getDestPackage()->getName().' - '.htmlspecialchars($edge->getVersionConstraint()),$client->getResponse()->getContent());
+        foreach ($graph->getPackages() as $package) {
+            $this->assertContains('package: ' . $package->getName(), $client->getResponse()->getContent());
+            $this->assertContains('projectPackage: ' . $package->getName() . ' - ' . $package->getVersion(), $client->getResponse()->getContent());
+            foreach ($package->getOutEdges() as $edge) {
+                $this->assertContains('dependency: ' . $edge->getSourcePackage()->getName() . ' - ' . $edge->getDestPackage()->getName() . ' - ' . htmlspecialchars($edge->getVersionConstraint()), $client->getResponse()->getContent());
             }
         }
     }

@@ -30,11 +30,6 @@ class Package
     private $extern;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $maxVersion;
-
-    /**
      * 
      */
     private $QRCodeImage;
@@ -119,30 +114,6 @@ class Package
     public function getExtern()
     {
         return $this->extern;
-    }
-
-    /**
-     * Set maxVersion
-     *
-     * @param string $maxVersion
-     *
-     * @return Package
-     */
-    public function setMaxVersion($maxVersion)
-    {
-        $this->maxVersion = $maxVersion;
-
-        return $this;
-    }
-
-    /**
-     * Get maxVersion
-     *
-     * @return string
-     */
-    public function getMaxVersion()
-    {
-        return $this->maxVersion;
     }
 
     /**

@@ -1,16 +1,17 @@
 <b>updated/created packages:</b><br/>
-{% for package in packages%}
-    package: {{ package.name }} - {{ package.maxVersion }}<br/>
+{% for package in packages %}
+    package: {{ package.name }}<br/>
 {% endfor %}
 <b>updated/created packages in relation to current project:</b><br/>
-{% for projectPackage in projectPackages%}
+{% for projectPackage in projectPackages %}
     projectPackage: {{ projectPackage.package.name }} - {{ projectPackage.version }}<br/>
 {% endfor %}
 <b>updated/created relations for the current project</b><br/>
-{% for dependency in dependencies%}
-    dependency: {{ dependency.sourceProjectPackage.package.name }} - {{ dependency.targetProjectPackage.package.name }} - {{ dependency.version }}<br/>
+{% for dependency in dependencies %}
+    dependency: {{ dependency.sourceProjectPackage.package.name }} - {{ dependency.targetProjectPackage.package.name }} - {{ dependency.version }}
+    <br/>
 {% endfor %}
 <b>outdated packages synchronized:</b><br/>
 {% for out in outdated %}
-    outdated: {{ out.name }} - {{ out.maxVersion }}<br/>
+    outdated: {{ out.package.name }} - {{ out.maxVersion }}<br/>
 {% endfor %}

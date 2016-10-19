@@ -1,6 +1,8 @@
 WebComposerSynchronizationBundle
 ================================
 
+This bundle create a database schema for project dependency informations and handle the synchronization between the project directory and the database entries.
+
 Installation
 ------------
 
@@ -9,16 +11,7 @@ Add this repository to your composer.json as below:
 ```php
 {
     ...
-    "repositories":[
-        ...
-        ,
-        {
-            "type": "git",
-            "url": "https://github.com/Seretos/WebComposerSynchronizationBundle"
-        }
-    ],
-    ...
-    "require-dev": {
+    "require": {
         ...
         "web-composer/synchronization-bundle": "0.1.*"
     }
@@ -59,6 +52,18 @@ web_composer_synchronization:
     prefix:   /synchronize/
 ```
 
+If you want to run this bundle on an specific entity manager, add this lines with
+your entity manager to your services.yml:
+
+```php
+web_composer.save_service:
+    class: WebComposer\SynchronizationBundle\Service\SaveService
+    arguments: ["@web_composer.entity_factory","@doctrine.orm.your_entity_manager"]
+web_composer.synchronizer:
+    class: WebComposer\SynchronizationBundle\Service\SynchronizationService
+    arguments: ["@composer_dependency_analyzer","@doctrine.orm.your_entity_manager","@web_composer.save_service","@web_composer.entity_factory"]
+```
+
 Usage
 -----
 
@@ -70,6 +75,7 @@ php bin/console web-composer:create-project projectName "/path/to/project"
 ```
 
 alternative you can use the fixture command to install the current project
+(this command requires the doctrine/doctrine-fixtures-bundle package)
 
 ```php
 php bin/console doctrine:fixture:load --append
@@ -83,4 +89,21 @@ php bin/console web-composer:synchronize-project projectName
 
 ```php
 http://your.url.de:port/synchronize/yourProjectName
+```
+
+Tests
+-----
+
+to run the unit tests execute the following command:
+(to use vendor\bin\phpunit you require the phpunit/phpunit package)
+
+```php
+//phpunitcommand -c /path/to/package/phpunit.xml.dist
+vendor\bin\phpunit -c vendor\web-composer\synchronization-bundle\phpunit.xml.dist
+```
+
+to run the integration test you need the routing.yml entry!
+
+```php
+vendor\bin\phpunit -c vendor\web-composer\synchronization-bundle\integration.xml.dist
 ```

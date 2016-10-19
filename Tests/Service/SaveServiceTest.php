@@ -30,19 +30,21 @@ class SaveServiceTest extends PHPUnit_Framework_TestCase
      * @var EntityManager|PHPUnit_Framework_MockObject_MockObject
      */
     private $mockEntityManager;
+
     protected function setUp()
     {
         parent::setUp();
         $this->mockEntityFactory = $this->getMockBuilder(ServiceEntityFactory::class)->disableOriginalConstructor()->getMock();
         $this->mockEntityManager = $this->getMockBuilder(EntityManager::class)->disableOriginalConstructor()->getMock();
 
-        $this->service = new SaveService($this->mockEntityFactory,$this->mockEntityManager);
+        $this->service = new SaveService($this->mockEntityFactory, $this->mockEntityManager);
     }
 
     /**
      * @test
      */
-    public function buildProject_ifExists(){
+    public function buildProject_ifExists()
+    {
         $mockProjectRepository = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
         $mockEntity = $this->getMockBuilder(Project::class)->disableOriginalConstructor()->getMock();
 
@@ -56,13 +58,14 @@ class SaveServiceTest extends PHPUnit_Framework_TestCase
         $this->mockEntityManager->expects($this->at(1))->method('persist')->with($mockEntity);
         $this->mockEntityManager->expects($this->at(2))->method('flush');
 
-        $this->assertSame($mockEntity,$this->service->buildProject('test','/path/to/test'));
+        $this->assertSame($mockEntity, $this->service->buildProject('test', '/path/to/test'));
     }
 
     /**
      * @test
      */
-    public function buildProject_ifNotExists(){
+    public function buildProject_ifNotExists()
+    {
         $mockProjectRepository = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
         $mockEntity = $this->getMockBuilder(Project::class)->disableOriginalConstructor()->getMock();
 
@@ -78,13 +81,14 @@ class SaveServiceTest extends PHPUnit_Framework_TestCase
         $this->mockEntityManager->expects($this->at(1))->method('persist')->with($mockEntity);
         $this->mockEntityManager->expects($this->at(2))->method('flush');
 
-        $this->assertSame($mockEntity,$this->service->buildProject('test','/path/to/test'));
+        $this->assertSame($mockEntity, $this->service->buildProject('test', '/path/to/test'));
     }
 
     /**
      * @test
      */
-    public function buildPackage_ifExists(){
+    public function buildPackage_ifExists()
+    {
         $mockPackageRepository = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
         $mockEntity = $this->getMockBuilder(Package::class)->disableOriginalConstructor()->getMock();
 
@@ -92,13 +96,14 @@ class SaveServiceTest extends PHPUnit_Framework_TestCase
 
         $mockPackageRepository->expects($this->at(0))->method('findOneBy')->with(['name' => 'test'])->will($this->returnValue($mockEntity));
 
-        $this->assertSame($mockEntity,$this->service->buildPackage('test','version','url'));
+        $this->assertSame($mockEntity, $this->service->buildPackage('test', 'url'));
     }
 
     /**
      * @test
      */
-    public function buildPackage_ifNotExists(){
+    public function buildPackage_ifNotExists()
+    {
         $mockPackageRepository = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
         $mockEntity = $this->getMockBuilder(Package::class)->disableOriginalConstructor()->getMock();
 
@@ -109,19 +114,19 @@ class SaveServiceTest extends PHPUnit_Framework_TestCase
         $this->mockEntityFactory->expects($this->at(0))->method('createPackage')->will($this->returnValue($mockEntity));
 
         $mockEntity->expects($this->at(0))->method('setName')->with('test')->will($this->returnValue($mockEntity));
-        $mockEntity->expects($this->at(1))->method('setMaxVersion')->with('version')->will($this->returnValue($mockEntity));
-        $mockEntity->expects($this->at(2))->method('setRepository')->with('url')->will($this->returnValue($mockEntity));
+        $mockEntity->expects($this->at(1))->method('setRepository')->with('url')->will($this->returnValue($mockEntity));
 
         $this->mockEntityManager->expects($this->at(1))->method('persist')->with($mockEntity);
         $this->mockEntityManager->expects($this->at(2))->method('flush');
 
-        $this->assertSame($mockEntity,$this->service->buildPackage('test','version','url'));
+        $this->assertSame($mockEntity, $this->service->buildPackage('test', 'url'));
     }
 
     /**
      * @test
      */
-    public function buildProjectPackage_ifExists(){
+    public function buildProjectPackage_ifExists()
+    {
         $mockProjectPackageRepository = $this->getMockBuilder(ProjectPackageRepository::class)->disableOriginalConstructor()->getMock();
         $mockProject = $this->getMockBuilder(Project::class)->disableOriginalConstructor()->getMock();
         $mockPackage = $this->getMockBuilder(Package::class)->disableOriginalConstructor()->getMock();
@@ -129,20 +134,21 @@ class SaveServiceTest extends PHPUnit_Framework_TestCase
 
         $this->mockEntityManager->expects($this->at(0))->method('getRepository')->with(ProjectPackage::class)->will($this->returnValue($mockProjectPackageRepository));
 
-        $mockProjectPackageRepository->expects($this->at(0))->method('findOneBy')->with(['project' => $mockProject,'package' => $mockPackage])->will($this->returnValue($mockEntity));
+        $mockProjectPackageRepository->expects($this->at(0))->method('findOneBy')->with(['project' => $mockProject, 'package' => $mockPackage])->will($this->returnValue($mockEntity));
 
         $mockEntity->expects($this->at(0))->method('setVersion')->with('version')->will($this->returnValue($mockEntity));
 
         $this->mockEntityManager->expects($this->at(1))->method('persist')->with($mockEntity);
         $this->mockEntityManager->expects($this->at(2))->method('flush');
 
-        $this->assertSame($mockEntity,$this->service->buildProjectPackage($mockProject,$mockPackage,'version'));
+        $this->assertSame($mockEntity, $this->service->buildProjectPackage($mockProject, $mockPackage, 'version'));
     }
 
     /**
      * @test
      */
-    public function buildProjectPackage_ifNotExists(){
+    public function buildProjectPackage_ifNotExists()
+    {
         $mockProjectPackageRepository = $this->getMockBuilder(ProjectPackageRepository::class)->disableOriginalConstructor()->getMock();
         $mockProject = $this->getMockBuilder(Project::class)->disableOriginalConstructor()->getMock();
         $mockPackage = $this->getMockBuilder(Package::class)->disableOriginalConstructor()->getMock();
@@ -150,7 +156,7 @@ class SaveServiceTest extends PHPUnit_Framework_TestCase
 
         $this->mockEntityManager->expects($this->at(0))->method('getRepository')->with(ProjectPackage::class)->will($this->returnValue($mockProjectPackageRepository));
 
-        $mockProjectPackageRepository->expects($this->at(0))->method('findOneBy')->with(['project' => $mockProject,'package' => $mockPackage])->will($this->returnValue(null));
+        $mockProjectPackageRepository->expects($this->at(0))->method('findOneBy')->with(['project' => $mockProject, 'package' => $mockPackage])->will($this->returnValue(null));
 
         $this->mockEntityFactory->expects($this->at(0))->method('createProjectPackage')->will($this->returnValue($mockEntity));
 
@@ -164,13 +170,14 @@ class SaveServiceTest extends PHPUnit_Framework_TestCase
         $this->mockEntityManager->expects($this->at(1))->method('persist')->with($mockEntity);
         $this->mockEntityManager->expects($this->at(2))->method('flush');
 
-        $this->assertSame($mockEntity,$this->service->buildProjectPackage($mockProject,$mockPackage,'version'));
+        $this->assertSame($mockEntity, $this->service->buildProjectPackage($mockProject, $mockPackage, 'version'));
     }
 
     /**
      * @test
      */
-    public function buildProjectPackageDependency_ifExists(){
+    public function buildProjectPackageDependency_ifExists()
+    {
         $mockProjectPackageDependencyRepository = $this->getMockBuilder(ProjectPackageDependencyRepository::class)->disableOriginalConstructor()->getMock();
         $mockEntity = $this->getMockBuilder(ProjectPackageDependency::class)->disableOriginalConstructor()->getMock();
 
@@ -179,7 +186,7 @@ class SaveServiceTest extends PHPUnit_Framework_TestCase
 
         $this->mockEntityManager->expects($this->at(0))->method('getRepository')->with(ProjectPackageDependency::class)->will($this->returnValue($mockProjectPackageDependencyRepository));
 
-        $mockProjectPackageDependencyRepository->expects($this->at(0))->method('findOneBy')->with(['sourceProjectPackage' => $mockSource,'targetProjectPackage' => $mockTarget])->will($this->returnValue($mockEntity));
+        $mockProjectPackageDependencyRepository->expects($this->at(0))->method('findOneBy')->with(['sourceProjectPackage' => $mockSource, 'targetProjectPackage' => $mockTarget])->will($this->returnValue($mockEntity));
 
         $mockEntity->expects($this->at(0))->method('setVersion')->with('version')->will($this->returnValue($mockEntity));
         $mockEntity->expects($this->at(1))->method('setDevelopment')->with(true)->will($this->returnValue($mockEntity));
@@ -187,13 +194,14 @@ class SaveServiceTest extends PHPUnit_Framework_TestCase
         $this->mockEntityManager->expects($this->at(1))->method('persist')->with($mockEntity);
         $this->mockEntityManager->expects($this->at(2))->method('flush');
 
-        $this->assertSame($mockEntity,$this->service->buildProjectPackageDependency($mockSource,$mockTarget,'version',true));
+        $this->assertSame($mockEntity, $this->service->buildProjectPackageDependency($mockSource, $mockTarget, 'version', true));
     }
 
     /**
      * @test
      */
-    public function buildProjectPackageDependency_ifNotExists(){
+    public function buildProjectPackageDependency_ifNotExists()
+    {
         $mockProjectPackageDependencyRepository = $this->getMockBuilder(ProjectPackageDependencyRepository::class)->disableOriginalConstructor()->getMock();
         $mockEntity = $this->getMockBuilder(ProjectPackageDependency::class)->disableOriginalConstructor()->getMock();
 
@@ -202,7 +210,7 @@ class SaveServiceTest extends PHPUnit_Framework_TestCase
 
         $this->mockEntityManager->expects($this->at(0))->method('getRepository')->with(ProjectPackageDependency::class)->will($this->returnValue($mockProjectPackageDependencyRepository));
 
-        $mockProjectPackageDependencyRepository->expects($this->at(0))->method('findOneBy')->with(['sourceProjectPackage' => $mockSource,'targetProjectPackage' => $mockTarget])->will($this->returnValue(null));
+        $mockProjectPackageDependencyRepository->expects($this->at(0))->method('findOneBy')->with(['sourceProjectPackage' => $mockSource, 'targetProjectPackage' => $mockTarget])->will($this->returnValue(null));
 
         $this->mockEntityFactory->expects($this->at(0))->method('createProjectPackageDependency')->will($this->returnValue($mockEntity));
 
@@ -213,6 +221,6 @@ class SaveServiceTest extends PHPUnit_Framework_TestCase
         $this->mockEntityManager->expects($this->at(1))->method('persist')->with($mockEntity);
         $this->mockEntityManager->expects($this->at(2))->method('flush');
 
-        $this->assertSame($mockEntity,$this->service->buildProjectPackageDependency($mockSource,$mockTarget,'version'));
+        $this->assertSame($mockEntity, $this->service->buildProjectPackageDependency($mockSource, $mockTarget, 'version'));
     }
 }
