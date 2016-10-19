@@ -1,0 +1,16 @@
+<phpunit>
+    <logging>
+        <log type="coverage-text" target="coverage-dev.txt" showUncoveredFiles="false"/>
+    </logging>
+    <testsuites>
+        <testsuite name="WebComposerSynchronizationBundle unit tests">
+            <directory>Tests/DataFixtures/ORM/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>DataFixtures</directory>
+        </whitelist>
+    </filter>
+</phpunit>
